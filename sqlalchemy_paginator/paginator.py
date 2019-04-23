@@ -6,7 +6,7 @@ Created on Oct 20, 2015
 from math import ceil
 from sqlalchemy import func
 
-from exceptions import PageNotAnInteger, EmptyPage
+from .exceptions import PageNotAnInteger, EmptyPage
 
 
 class Paginator(object):
@@ -14,21 +14,21 @@ class Paginator(object):
     This class helps you to manage data with pagination. This class will fetch
     data in pages. That is, instead of fetching all the records from database
     at a time, this class will fetch defined number of records at a time.
-    
+
     So that you can perform particular action(s) on fetched data and then fetch
     data for next page. In this way we can get ride from the memory overloading
     problem as well.
-    
-    This class will also optimized the query for fetching total number of 
+
+    This class will also optimized the query for fetching total number of
     records from database against given query_set. Optimization will be applied
     only on the query that will be used for fetching total number of records.
     You can also provide the separate query in optional_count_query_set argument
     for fetching total number of records.
-    
+
     ..usage::
-        You can use this paginator module in python scripting code and in web 
+        You can use this paginator module in python scripting code and in web
         based application code as well.
-        
+
         :Example1:
         >>> from sqlalchemy_paginator import Paginator
         >>> query = session.query(MyModel)
@@ -36,7 +36,7 @@ class Paginator(object):
         >>> for page in paginator:
         >>>     print page.number  # page number of current page in iterator
         >>>     print page.object_list  # this is a list that contains the records of current page
-        
+
         :Example2:
         >>> from sqlalchemy_paginator import Paginator
         >>> query = session.query(MyModel)
@@ -56,10 +56,10 @@ class Paginator(object):
                  allow_empty_first_page=True):
         """
         Constructor to create the paginator object.
-        
+
         :param query_set: SQLAlchemy query which is used for fetching data from
                           from database.
-        :type query_set: SQLAlchemy query object. 
+        :type query_set: SQLAlchemy query object.
         :param per_page_limit: Required number of records in a page.
         :type per_page_limit: int.
         :param optional_count_query_set: This is a optional query set that will
@@ -84,15 +84,15 @@ class Paginator(object):
         self.allow_empty_first_page = allow_empty_first_page
         self.__total_pages = self.__count = None
         self.__iter_page = 1
-        
+
     def __iter__(self):
         """The __iter__ returns the iterator object and is implicitly called at
         the start of loops"""
         self.__iter_page = 1
         return self
-    
+
     def next(self):
-        """Returns the next page and is implicitly called at each loop 
+        """Returns the next page and is implicitly called at each loop
         increment."""
         if self.__iter_page > self.total_pages:
             raise StopIteration
@@ -105,13 +105,13 @@ class Paginator(object):
         This method valid that if given page number is valid or not. Like page
         number should be integer and greater than zero and should not be greater
         than total number of pages.
-        
+
         :param page_number: Required page number against which you want to fetch
                             records from database.
         :type page_number: int.
         :return: If given page number is valid then return it.
         :rtype: int.
-        
+
         ..warning::
             This function can raise the following exceptions
             - PageNotAnInteger
@@ -134,18 +134,18 @@ class Paginator(object):
         """
         Returns a page object against given page number if given page number is
         valid.
-        
+
         :param page_number: Required page number against which you want to fetch
                             records from database.
         :type page_number: int.
-        :return: Page object that contains the records against given page 
+        :return: Page object that contains the records against given page
                  number.
         :rtype: Page.
-        
+
         ..seealso::
             - Page class
             - Paginator.validate_page_number()
-        
+
         ..warning::
             This function can raise the following exceptions
             - PageNotAnInteger
@@ -159,10 +159,10 @@ class Paginator(object):
     def __get_count(self):
         """
         Returns the total number of objects, across all pages.
-        
+
         :return: Total number of records against given query.
         :rtype: int.
-        
+
         ..info::
             If optional_count_query_set is given then this function will use
             query for fetching total number records otherwise query_set query
@@ -179,10 +179,10 @@ class Paginator(object):
     def __get_total_pages(self):
         """
         Returns the total number of pages.
-        
+
         :return: Total number of pages against given query.
         :rtype: int.
-        
+
         ..info::
             If total number of records is zero and allow_empty_first_page is
             true then returns 1 instead of 0.
@@ -200,7 +200,7 @@ class Paginator(object):
     def __pages_range(self):
         """
         Returns a range of pages.
-        
+
         :return: List that contains range of pages.
         :rtype: list.
         """
