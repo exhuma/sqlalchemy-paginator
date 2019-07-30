@@ -174,6 +174,8 @@ class Paginator(object):
             if self.optional_count_query_set is None:
                 self.optional_count_query_set = self.query_set.order_by(None)
             count_query = self.optional_count_query_set.statement.with_only_columns([func.count()])
+            if self.optional_count_query_set._group_by:
+                count_query = count_query.alias().count()
             self.__count = self.optional_count_query_set.session.execute(count_query).scalar()
         return self.__count
     count = property(__get_count)
